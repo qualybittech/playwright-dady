@@ -2,20 +2,20 @@
 
 ## Playwright framework project to run the web application tests
 
- npx playwright test
-    Runs the end-to-end tests.
+# Runs the end-to-end tests.
+##  npx playwright test
 
-  npx playwright test --ui
-    Starts the interactive UI mode.
+#   Starts the interactive UI mode.
+##  npx playwright test --ui
 
-  npx playwright test --project=chromium
-    Runs the tests only on Desktop Chrome.
+#   Runs the tests only on Desktop Chrome.
+##  npx playwright test --project=chromium
 
-  npx playwright test example
-    Runs the tests in a specific file.
+##  npx playwright test example
+#   Runs the tests in a specific file.
 
-  npx playwright test --debug
-    Runs the tests in debug mode.
+## npx playwright test --debug
+#  Runs the tests in debug mode.
 
-  npx playwright codegen
-    Auto generate tests with Codegen.
+## npx playwright codegen
+#  Auto generate tests with Codegen.
