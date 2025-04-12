@@ -1,37 +1,27 @@
-import { type Locator, type Page } from '@playwright/test';
+//import { type Locator, type Page ,type expect} from '@playwright/test';
 
-export class LoginPage  {
-    private page: Page;
-    private emailInput: Locator;
-    private passwordInput: Locator;
-    private signInButton: Locator;
-    private userLink: Locator;
-    private continueButton: Locator;
-    private brButton: Locator;
-    private createBusinessAccountLink: Locator;
+import { PageObjectModel } from "./pageObjectModel";
 
-    constructor(page: Page) {
-        this.page = page;
-        this.emailInput = page.getByRole('textbox', { name: 'Email ID' });
-        this.passwordInput = page.getByRole('textbox', { name: 'Password' });
-        this.signInButton = page.getByRole('button', { name: 'Sign In' });
-        this.userLink = page.locator('a').filter({ hasText: 'baburgn12@gmail.comADMINbsquare' });
-        this.continueButton = page.getByRole('button', { name: 'Continue' });
-        this.brButton = page.getByRole('button', { name: 'BR' });
-        this.createBusinessAccountLink = page.getByText('Create new Business Account');
-    }
+export class LoginPage  extends PageObjectModel {
+    emailInput = this.page.getByRole('textbox', { name: 'Email ID' });
+    passwordInput = this.page.getByRole('textbox', { name: 'Password' });
+    signInButton = this.page.getByRole('button', { name: 'Sign In' });
+    continueButton = this.page.getByRole('button', { name: 'Continue' });
+    unauthorisedMessage = this.page.locator('text=Unauthorized');
+
+    async navigateTo(url: string) {
+        await this.page.goto(url);
+    }   
+
     async login(email, password) {
-        await this.page.goto('https://www.dadyin.com/#/signin');
-        await this.emailInput.click();
+        await this.navigateTo('https://www.dadyin.com/#/signin');
         await this.emailInput.fill(email);
-        await this.passwordInput.click();
         await this.passwordInput.fill(password);
         await this.signInButton.click();
-        await this.userLink.click();
-        await this.continueButton.click();
-        await this.brButton.click();
-        await this.createBusinessAccountLink.click();
+        // Only for multiple account login
+            if(await this.page.locator('a').filter({ hasText: email }).isVisible()) {
+                await this.page.locator('a').filter({ hasText: email }).click();
+                await this.continueButton.click();
+            }
     }
 }
-
-export default LoginPage;
