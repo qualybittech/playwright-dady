@@ -2,6 +2,9 @@
 
 ## Playwright framework project to run the web application tests
 
+# set the environment variable
+## $Env:ENV="prod"
+
 # Runs the end-to-end tests.
 ##  npx playwright test
 

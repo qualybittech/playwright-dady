@@ -1,0 +1,11 @@
+{
+    "URL": "https://www.dadyin.com/#/signin",
+    "login": {
+        "username": "baburgn12@gmail.com",
+        "password": "Celerio@3535"
+    },
+    "invalidlogin":{
+        "username": "invalid@gmail.com",
+        "password": "incorrect"
+    }
+}
