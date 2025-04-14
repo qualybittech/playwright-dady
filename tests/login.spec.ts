@@ -1,7 +1,7 @@
 import { Page, test, expect } from '@playwright/test';
 import { LoginPage } from '../models/login';
 import { getTestData } from '../utils/helper';
-import { HomePage } from '../models/homepage';
+import { HomePage } from '../models/homePage';
 
 test.describe('Login Tests', () => {
     let loginPage: LoginPage;
