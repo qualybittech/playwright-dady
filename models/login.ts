@@ -9,18 +9,18 @@ export class LoginPage  extends PageObjectModel {
     unauthorisedMessage = this.page.locator('text=Unauthorized');
 
     async navigateTo(url: string) {
-        await this.page.goto(this.data.URL);
+        await this.page.goto(url);
     }   
 
     async login(email, password) {
-        await console.log(process.env.URL)
-        await this.navigateTo(process.env.URL || '');
+        await this.navigateTo(this.data.URL);
         await this.emailInput.fill(email);
         await this.passwordInput.fill(password);
         await this.signInButton.click(); 
+        await this.page.waitForLoadState('networkidle'); // Wait for the page to load completely
         // Only for multiple account login
-            if(await this.page.locator('a').filter({ hasText: email }).isVisible()) {
-                await this.page.locator('a').filter({ hasText: email }).click();
+            if(await this.page.locator('a').filter({ hasText: email }).count() > 0) {
+                await this.page.locator('a').filter({ hasText: email}).first().click();
                 await this.continueButton.click();
             }
     }
