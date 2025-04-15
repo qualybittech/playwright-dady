@@ -21,4 +21,4 @@
 #  Runs the tests in debug mode.
 
 ## npx playwright codegen
-#  Auto generate tests with Codegen.
+#  Auto generate tests with Codegen
