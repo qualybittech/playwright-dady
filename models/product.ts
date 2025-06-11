@@ -114,14 +114,24 @@ export class AddProduct extends PageObjectModel {
         await this.page.goto(url);
   }
   //  Method defined outside constructor
-  async part(productCode,productDescription,upcCode,eanCode,unitCount,purchaseDescription,openingInventory,inventoryLocation,addedBy,netCost,netWeight) {
-
+  async part(productAttributesCheck,productCode,productDescription,upcCode,eanCode,unitCount,purchaseDescription,openingInventory,inventoryLocation,addedBy,netCost,netWeight) {
+    
+    //Navigate to the product management page
+    await this.page.waitForLoadState('networkidle');
     await this.menu.click({ timeout: 60000 })
+    
     await this.productManangement.click({ timeout: 15000 });
     await this.add.click({ timeout: 30000 });
-    await this.productAttributes.check({ timeout: 15000 });
+
+    if(productAttributesCheck === 'true') {
+      await this.productAttributes.check({ timeout: 15000 });
+    }
+    
+    //if(Click only if attributes are not true)
     await this.packageAttributes.check({ timeout: 15000 });
     await this.inventory.check({ timeout: 15000 });
+
+
     await this.productCode.click({ timeout: 15000 });
     await this.productCode.fill(productCode);
     await this.productDescription.click();
@@ -130,10 +140,16 @@ export class AddProduct extends PageObjectModel {
     await this.upcCode.fill(upcCode);
     await this.eanCode.click();
     await this.eanCode.fill(eanCode);
+    //Add dynamic values and paramtertize SKU type 
     await this.skuType.selectOption('UNIT');
     await this.unitCount.click({ timeout: 60000 });
     await this.unitCount.fill(unitCount);
+    //Unit name is missing
+    //Prodcut type and subtype, purchase descriptions missing
+
     await this.selectProductType.click();
+
+    //Move inventory to seperate method
     await this.openingInventory.click()
     await this.openingInventory.fill(openingInventory)
     await this.inventorySelect.selectOption('UNIT');
