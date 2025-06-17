@@ -5,6 +5,7 @@ import { generateRandomName } from '../utils/helper';
 export class Product extends PageObjectModel {
 
   // Locators for Product information section
+  productDetailMenu: Locator;
   addProduct: Locator;
   productCode: Locator;
   productDescription: Locator;
@@ -90,6 +91,7 @@ export class Product extends PageObjectModel {
     this.addProduct = this.page.getByRole('button', { name: 'Add Product' });
 
     // Locators for Product information section
+    this.productDetailMenu = this.page.getByText('Product Details');
     this.productCode = this.page.locator('input[ng-reflect-name="productCode"]');
     this.productDescription = this.page.locator('input[ng-reflect-name="description"]')
     this.upcCode = this.page.locator('input[ng-reflect-name="upcCode"]');
@@ -134,6 +136,7 @@ export class Product extends PageObjectModel {
 
     // Locators for Package Details section
     this.packageAttributes = this.page.locator('input[ng-reflect-name="isPackageAttributes"]');
+    //this.packageDetails = this.page.locator('button').filter({ hasText: 'Package Details' }).first();
     this.packageDetails = this.page.getByText('Package Details');
     this.skuPackage = this.page.locator('input#sku');
     this.yesButton = this.page.getByRole('button', { name: 'Yes' });
@@ -196,6 +199,8 @@ export class Product extends PageObjectModel {
   async otherInfo(choosePreferedVendor,customProductFor,saleable,markasFavorite,
       isaRawMaterial,isaSupplies,isaPackaging,isCustomizable,displayInQuickCheckout){
     
+    await this.productDetailMenu.click();
+    await this.page.waitForTimeout(2000);
     await this.choosePreferedVendor.click()
     await this.page.locator('span').filter({ hasText: choosePreferedVendor }).first().click();
     
@@ -287,7 +292,10 @@ async packageDetailsInput(packageAttributes,mqo,mqs,stackable) {
     if (packageAttributes === 'true') {
       //await this.packageAttributes.check();
       
+      // Scroll to top of the page
+      await this.page.evaluate(() => window.scrollTo(0, 0));
       await this.packageDetails.click();
+      await this.page.waitForTimeout(2000);
       await this.skuPackage.click();
       await this.yesButton.click();
       await this.mqoBulk.fill(mqo);
