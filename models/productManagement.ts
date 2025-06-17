@@ -32,68 +32,57 @@ export class Product extends PageObjectModel {
   price: Locator;
 
   // Locators for Product attributes section
+  productAttributeInput: Locator;
   selectProductunit: Locator;
+  productAttributes: Locator;
+  productAttrAdd: Locator;
   USDMT: Locator;
   USDMTSelect: Locator;
 
   // Locators for Inventory section
+  openingInventory:Locator;
+  inventoryLocation:Locator;
   inventoryAddedBy: Locator;
   inventoryAddedOn: Locator;
   showLiveInventory: Locator;
   showGreaterThan: Locator;
   greaterThanQty: Locator;
-  customInventoryType: Locator;
+  customInventoryType: Locator;  
+  inventorySelect:Locator;
+  inventory: Locator;
 
-  productInformationAdd: Locator;
-  saveProduct: Locator;
+  // Locators for Package Details section
+  packageAttributes: Locator;
   packageDetails: Locator;
-  sku: Locator;
+  skuPackage: Locator;
   skuUnit: Locator;
   yesButton: Locator;
-  mqo: Locator;
+  mqoBulk: Locator;
+  mqoCustom: Locator;
   mqs: Locator;
-  stackable: Locator;
+  stackableYes: Locator;
+  stackableNo: Locator;
+  addNewPackage: Locator;
+
+// Locators for Pricing Details section
   pricingDetails: Locator;
-  unit: Locator;
-  decimal: Locator;
+  unitBuyerMargin: Locator;
+  unitBuyerDecimal: Locator;
   skuBuyerMargin: Locator;
   skuBuyerDecimal: Locator;
   palletBuyerMargin: Locator;
   palletBuyerDecimal: Locator;
+  containerBuyerMargin: Locator;
+  containerBuyerDecimal: Locator; 
+
+// Locators for Other Details section
   otherDetails: Locator;
   addKeyword: Locator;
   addKeywordInput: Locator;
+
+// Locators for Product header section
+  saveProduct: Locator;
   publish: Locator;
-  emailInput: Locator;
-  passwordInput: Locator;
-  signInButton: Locator; 
-  productAttributes: Locator;
-  packageAttributes: Locator;
-  inventory: Locator;
-  productAttributeInput: Locator;
-  addAttributes: Locator;
-  productAdd: Locator;
-  
-  addedBy:Locator;
-  inventoryLocation:Locator;
-  openingInventory:Locator;
-  inventorySelect:Locator;
-  netWeight:Locator;
-  netCost:Locator;
-  bodyLength: Locator;
-  bodyWidth: Locator;
-  bodySurfaceArea: Locator;
-  bodyWeight: Locator;
-  patchWidth: Locator;
-  patchLength: Locator;
-  patchSurfaceArea: Locator;
-  Weight: Locator;
-  width: Locator;
-  length: Locator;
-  cost: Locator;
-  gsm: Locator;
-  density: Locator;
-  volume: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -127,10 +116,12 @@ export class Product extends PageObjectModel {
     // Locators for Product attributes section
     this.productAttributes = this.page.locator('input[ng-reflect-name="isProductAttributes"]');
     this.selectProductunit = this.page.locator('input#yesno').nth(4);
+    this.productAttrAdd = this.page.locator('dadyin-button[ng-reflect-label="Add"]').nth(1);
     this.USDMT = this.page.locator('label').filter({hasText: ' USD/MT'}).first().locator('..').locator('input');
     this.USDMTSelect = this.page.locator('label').filter({hasText: ' USD/MT'}).first().locator('..').locator('select');
 
     // Locators for Inventory section
+    this.inventory = this.page.locator('input[ng-reflect-name="isInventoryListed"]')
     this.openingInventory=this.page.locator('input[ng-reflect-name="openingInventory"]')
     this.inventorySelect  = this.page.locator('select[ng-reflect-name="inventoryType"]')
 	  this.inventoryLocation =this.page.locator('input[ng-reflect-name="inventoryLocation"]')
@@ -139,59 +130,39 @@ export class Product extends PageObjectModel {
     this.showLiveInventory = this.page.locator('button').filter({ hasText: ' Show Live Inventory ' }).first();
     this.showGreaterThan = this.page.locator('button').filter({ hasText: ' Show greater than ' }).first();
     this.greaterThanQty =this.page.locator('input[ng-reflect-name="customInventoryValue"]')
-    this.customInventoryType =this.page.locator('select[ng-reflect-name="customInventoryType"]')
-    
-    
-	  this.addedBy=this.page.getByRole('region', { name: 'Inventory (You can not enable' }).getByRole('textbox').nth(1)
-    
+    this.customInventoryType =this.page.locator('select[ng-reflect-name="customInventoryType"]')       
 
-    this.productInformationAdd = this.page.locator('div:nth-child(3) > .attribute > .attribute-input > .ng-pristine');
-    this.saveProduct = this.page.getByRole('button', { name: 'Save Draft' });
+    // Locators for Package Details section
+    this.packageAttributes = this.page.locator('input[ng-reflect-name="isPackageAttributes"]');
     this.packageDetails = this.page.getByText('Package Details');
-    this.sku = this.page.getByRole('region', { name: 'Product Information Add' }).locator('select');
-    this.skuUnit = this.page.getByText('Unit Count/UNIT');
+    this.skuPackage = this.page.locator('input#sku');
     this.yesButton = this.page.getByRole('button', { name: 'Yes' });
-    this.mqo = this.page.getByRole('textbox').first();
-    this.mqs = this.page.getByRole('textbox', { name: 'Enter your value' });
-    this.stackable = this.page.getByRole('button', { name: 'Yes' });
+    this.mqoBulk = this.page.locator('label').filter({hasText: 'MQO (Bulk/Container)'}).first().locator('..').locator('input');
+    this.mqoCustom = this.page.locator('label').filter({hasText: 'MQO (Custom)'}).first().locator('..').locator('input');
+    this.mqs = this.page.locator('label').filter({hasText: 'MQS'}).first().locator('..').locator('input');
+    this.stackableYes = this.page.getByRole('button', { name: 'Yes' });
+    this.stackableNo = this.page.getByRole('button', { name: 'No' });
+    this.addNewPackage = this.page.getByRole('button', { name: 'Add New Package' });
+    
+    // Locators for Pricing Details section
     this.pricingDetails = this.page.getByText('Pricing Details', { exact: true });
-    this.unit = this.page.getByRole('row', { name: 'MARGIN %' }).getByRole('spinbutton').first();
-    this.decimal = this.page.getByRole('row', { name: 'DECIMAL' }).getByRole('spinbutton').first();
-    this.skuBuyerMargin = this.page.getByRole('row', { name: 'MARGIN %' }).getByRole('spinbutton').nth(1);
-    this.skuBuyerDecimal = this.page.getByRole('row', { name: 'DECIMAL' }).getByRole('spinbutton').nth(1);
-    this.palletBuyerMargin = this.page.getByRole('row', { name: 'MARGIN %' }).getByRole('spinbutton').nth(2);
-    this.palletBuyerDecimal = this.page.getByRole('row', { name: 'DECIMAL' }).getByRole('spinbutton').nth(2);
+    this.unitBuyerMargin = this.page.locator('input[ng-reflect-name="marginPercent"]').nth(0);
+    this.unitBuyerDecimal = this.page.locator('input[ng-reflect-name="decimalValue"]').nth(0);
+    this.skuBuyerMargin = this.page.locator('input[ng-reflect-name="marginPercent"]').nth(1);
+    this.skuBuyerDecimal = this.page.locator('input[ng-reflect-name="decimalValue"]').nth(1);
+    this.palletBuyerMargin = this.page.locator('input[ng-reflect-name="marginPercent"]').nth(2);
+    this.palletBuyerDecimal = this.page.locator('input[ng-reflect-name="decimalValue"]').nth(2);
+    this.containerBuyerMargin = this.page.locator('input[ng-reflect-name="marginPercent"]').nth(3);
+    this.containerBuyerDecimal = this.page.locator('input[ng-reflect-name="decimalValue"]').nth(3);
+    
+    // Locators for Other Details section
     this.otherDetails = this.page.getByText('Other Details');
     this.addKeywordInput = this.page.getByRole('textbox', { name: 'Type keywords that you want' })
     this.addKeyword = this.page.getByRole('region', { name: 'Product Keywords' }).getByRole('button');
+    
+    // Locators for Product header section
     this.publish = this.page.getByRole('button', { name: 'Publish' });
-
-    
-    this.packageAttributes = this.page.locator('input[ng-reflect-name="isPackageAttributes"]');
-	  this.inventory = this.page.locator('input[ng-reflect-name="isProductAttributes"]')
-    this.productAttributeInput = this.page.getByRole('region', { name: 'Product Unit : Wt/Unit : 0.' }).locator('#yesno')
-    this.productAdd = this.page.locator('#pAttribute')
-    this.addAttributes = this.page.getByLabel('Product Unit : Wt/Unit : 0.').getByRole('button', { name: 'Add' })
-    this.netCost = this.page.getByRole('textbox', { name: 'Enter your value' }).first()
-	  this.netWeight = this.page.getByRole('textbox', { name: 'Enter your value' }).nth(1)
-
-    this.bodyLength = this.page.locator('.width-perc-25 > .attribute > .attribute-input > input').first()
-    this.bodyWidth = this.page.locator('.d-flex > .row > div:nth-child(2) > .attribute > .attribute-input > input')
-    this.bodySurfaceArea = this.page.locator('.d-flex > .row > div:nth-child(3) > .attribute > .attribute-input > input')
-    this.bodyWeight = this.page.locator('.d-flex > .row > div:nth-child(4) > .attribute > .attribute-input > input')
-    this.patchWidth = this.page.locator('.d-flex > .row > div:nth-child(5) > .attribute > .attribute-input > input')
-    this.patchLength = this.page.locator('div:nth-child(6) > .attribute > .attribute-input > input')
-    this.patchSurfaceArea = this.page.locator('div:nth-child(7) > .attribute > .attribute-input > input')
-    this.Weight = this.page.locator('div:nth-child(8) > .attribute > .attribute-input > input')
-    this.width = this.page.locator('div:nth-child(9) > .attribute > .attribute-input > input')
-    this.length = this.page.locator('div:nth-child(10) > .attribute > .attribute-input > input')
-    this.cost = this.page.locator('div:nth-child(11) > .attribute > .attribute-input > input')
-    this.gsm = this.page.locator('div:nth-child(12) > .attribute > .attribute-input > input')
-    this.density = this.page.locator('div:nth-child(13) > .attribute > .attribute-input > input')
-    this.volume = this.page.locator('div:nth-child(14) > .attribute > .attribute-input > input')
-    this.unitName = this.page.locator('div:nth-child(5) > .attribute > .attribute-input > .ng-untouched').first()
-    this.purchaseDescription = this.page.locator('div:nth-child(3) > .attribute > .attribute-input > .ng-untouched').first()
-    
+    this.saveProduct = this.page.getByRole('button', { name: 'Save Draft' });
 
   }
   
@@ -223,8 +194,8 @@ export class Product extends PageObjectModel {
 
   // Method to fill other product details information
   async otherInfo(choosePreferedVendor,customProductFor,saleable,markasFavorite,
-      isaRawMaterial,isaSupplies,isaPackaging,isCustomizable,displayInQuickCheckout
-    ){
+      isaRawMaterial,isaSupplies,isaPackaging,isCustomizable,displayInQuickCheckout){
+    
     await this.choosePreferedVendor.click()
     await this.page.locator('span').filter({ hasText: choosePreferedVendor }).first().click();
     
@@ -255,98 +226,98 @@ export class Product extends PageObjectModel {
     } 
 
     if (isCustomizable === 'true') {
-    await this.isCustomizable.check({ timeout: 15000 });
+    await this.isCustomizable.check();
     }
     
     if (displayInQuickCheckout === 'true') {
-    await this.isQuickCheckoutEligible.check({ timeout: 15000 });
+    await this.isQuickCheckoutEligible.check();
     }
 
     }
     
   // Method to fill product attributes
-   async productAttr(productAttributes){
+   async productAttribute(productAttributes){
     
+    // Enter product attributes only if the productAttributes flag is set to 'true'
     if (productAttributes.productAttributes === 'true') {
       await this.productAttributes.check();
- 
-      // Get all keys ending with 'Unit'
-      const unitKeys = Object.keys(productAttributes).filter(key => key.endsWith('Unit'));
+      await this.page.waitForTimeout(2000);
 
-      // Count attributes excluding those ending with 'Unit'
-      const count = Object.keys(productAttributes).filter(key => !unitKeys.includes(key)).length;
-
-      for (let i = 1; i < count/2; i+2) {
+      const entries = Object.entries(productAttributes);       
+       for (let i = 1; i < entries.length; i+=2) {
+        const [pairKey1,pairValue1] = entries[i];
+        const [pairKey2,pairValue2] = entries[i + 1] ||[];
+        console.log('pair1:', pairKey1, pairValue1);
+        console.log('pair2:', pairKey2, pairValue2);
         
         await this.selectProductunit.click();
-        //await this.page.locator('span').filter({ hasText: selectProductType }).first().click();
-        await this.USDMT.fill('1000');
-        await this.USDMTSelect.selectOption('USD/mt');
+        await this.page.locator('span').filter({ hasText: pairKey1 }).first().click();
+        await this.page.waitForTimeout(2000);
+
+        await this.page.locator('label').filter({hasText: pairKey1}).first().locator('..').locator('input').fill(String(pairValue1));
+        await this.page.locator('label').filter({hasText: String(pairValue2)}).first().locator('..').locator('select');
       }
 
-
-    
- /*
-
-    await this.bodyLength.fill(bodyLength)    
-    await this.bodyWidth.fill(bodyWidth)    
-    await this.bodySurfaceArea.fill(bodySurfaceArea)    
-    await this.bodyWeight.fill(bodyWeight)    
-    await this.Weight.fill(Weight)    
-    await this.width.fill(width)    
-    await this.length.fill(length)    
-    await this.cost.fill(cost)    
-    await this.volume.fill(volume)
-     await this.netCost.fill(netCost)    
-    await this.netWeight.fill(netWeight)  */
     }
   }
     
 async addInventory(inventory,inventoryType,openingInventory,inventoryLocation,
   addedBy,addedOn,showLiveInventory,greaterThanQty,customInventoryType) {
     
-//  await this.inventory.waitFor({ state: 'visible', timeout: 15000 });
   if( inventory === 'true') {
     await this.inventory.check();
-
+    await this.openingInventory.waitFor({ state: 'visible', timeout: 20000 });
+    await this.page.waitForTimeout(2000);
     await this.openingInventory.fill(openingInventory)    
     await this.inventorySelect.selectOption(inventoryType);
     await this.page.waitForTimeout(2000);
     await this.inventoryLocation.fill(inventoryLocation)
-    await this.addedBy.fill(addedBy)
+    await this.inventoryAddedBy.fill(addedBy)
     await this.inventoryAddedOn.fill(addedOn)
       if(showLiveInventory !== 'true') {
         await this.showGreaterThan.click();
         await this.greaterThanQty.fill(greaterThanQty)
         await this.customInventoryType.selectOption(customInventoryType);
       }
-    
-  
   }
 };
 
-    async packageDetailsInput(mqo,mqs) {
-    await this.packageAttributes.waitFor({ state: 'visible', timeout: 15000 });
-    await this.packageAttributes.check();
-    await this.packageDetails.click({ timeout: 15000 });
-    await this.mqo.click({ timeout: 60000 });
-    await this.mqo.fill(mqo)
-    await this.mqs.fill(mqs)
+// Method to fill package details
+async packageDetailsInput(packageAttributes,mqo,mqs,stackable) {
+    if (packageAttributes === 'true') {
+      //await this.packageAttributes.check();
+      
+      await this.packageDetails.click();
+      await this.skuPackage.click();
+      await this.yesButton.click();
+      await this.mqoBulk.fill(mqo);
+      await this.mqs.fill(mqs);
+      if( stackable !== 'true') {
+        await this.stackableNo.click();
+      }
+      await this.addNewPackage.click();
+    }
     }
 
-    async pricing(unit,decimal,skuBuyerMargin,skuBuyerDecimal){
-        await this.pricingDetails.click({ timeout: 15000 })
-        await this.unit.fill(unit)
-        await this.decimal.fill(decimal)
-        await this.skuBuyerMargin.fill(skuBuyerMargin)
-        await this.skuBuyerDecimal.fill(skuBuyerDecimal)
+// Method to fill pricing details
+async pricing(unitBuyerMargin,unitBuyerDecimal,skuBuyerMargin,skuBuyerDecimal,palletBuyerMargin,
+  palletBuyerDecimal,containerBuyerMargin,containerBuyerDecimal){
+      await this.pricingDetails.click();
+      await this.unitBuyerMargin.fill(unitBuyerMargin)
+      await this.unitBuyerDecimal.fill(unitBuyerDecimal)
+      await this.skuBuyerMargin.fill(skuBuyerMargin)
+      await this.skuBuyerDecimal.fill(skuBuyerDecimal)
+      await this.skuBuyerMargin.fill(palletBuyerMargin)
+      await this.skuBuyerDecimal.fill(palletBuyerDecimal)
+      await this.skuBuyerMargin.fill(containerBuyerMargin)
+      await this.skuBuyerDecimal.fill(containerBuyerDecimal)
     }
 
-    async other(addKeywordInput){
-        await this.otherDetails.click({ timeout: 30000 });
-        await this.addKeywordInput.click({ timeout: 60000 })
-        await this.addKeywordInput.fill(addKeywordInput)
-        await this.addKeyword.click({ timeout: 15000 })
-       // await this.publish.click();
+// Method to add other details like keywords
+async other(addKeywordInput){
+    await this.otherDetails.click();
+    await this.addKeywordInput.fill(addKeywordInput)
+    await this.addKeyword.click()
+    // await this.publish.click();
     }
 }

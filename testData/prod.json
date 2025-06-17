@@ -31,10 +31,10 @@
         "productAttributes":
         {
             "productAttributes":"true",
-            "USD/mt":"1",
-            "USD/mtUnit":"USD/mt",
-            "gsm":"200",
-            "gsmUnit":"gm/m^2"
+            "USD/MT":"1",
+            "USD/MTUnit":"USD/mt",
+            "GSM":"200",
+            "GSMUnit":"gm/m^2"
         },
         "inventory":"true",
         "inventoryType":"UNIT",
@@ -45,27 +45,18 @@
         "showLiveInventory":"true",
         "greaterThanQty":"",
         "custominventoryType":"UNIT",
-        "bodyLength":"" ,
-        "bodyWidth": "",
-        "bodySurfaceArea":"", 
-        "bodyWeight": "",
-        "patchWidth": "",
-        "patchLength": "",
-        "patchSurfaceArea": "",
-        "Weight": "",
-        "width": "",
-        "length":"",
-        "cost": "",
-        "GSM": "",
-        "density": "",
-        "volume": "",
-        "addKeywordInput":"mfr",
+        "packageAttributes":"true",
         "mqs":"456",
         "mqo":"457",
-        "unit":"50",
-        "decimal":"0.50",
-        "skuBuyerMargin":"40",
+        "stackable":"true",
+        "unitBuyerMargin":"40",
+        "unitBuyerDecimal":"0.25",
+        "skuBuyerMargin":"50",
         "skuBuyerDecimal":"0.25",
-        "packageAttributes":"true"
+        "palletBuyerMargin":"60",
+        "palletBuyerDecimal":"0.25",
+        "containerBuyerMargin":"70",
+        "containerBuyerDecimal":"0.25",
+        "addKeywordInput":"mfr"
     }
 }

@@ -22,7 +22,7 @@ test.describe('Tests', () => {
   });
 
 
-  test('should add a product successfully', async () => {
+  test('To add a product details successfully', async () => {
     
     await loginPage.login(data.login.username, data.login.password);
     
@@ -43,16 +43,15 @@ test.describe('Tests', () => {
       data.productDetails.addedOn,data.productDetails.showLiveInventory,data.productDetails.greaterThanQty,
       data.productDetails.custominventoryType)
 
-    //await productPage.productAttr(data.productDetails.productAttributes)
-    
-  /*  
-    
-    
-   // 
+    await productPage.productAttribute(data.productDetails.productAttributes)
 
-    await productPage.packageDetailsInput(data.productDetails.mqo,data.productDetails.mqs);
-    await productPage.pricing(data.productDetails.unit,data.productDetails.decimal,data.productDetails.skuBuyerDecimal,data.productDetails.skuBuyerMargin);
-    await productPage.other(data.productDetails.addKeywordInput);*/
-
+    await productPage.packageDetailsInput(data.productDetails.packageAttributes,data.productDetails.mqo,
+          data.productDetails.mqs,data.productDetails.stackable);     
+    
+    await productPage.pricing(data.productDetails.unitBuyerMargin,data.productDetails.unitBuyerDecimal,
+        data.productDetails.skuBuyerMargin,data.productDetails.skuBuyerDecimal,data.productDetails.palletBuyerMargin,
+        data.productDetails.palletBuyerDecimal,data.productDetails.containerBuyerMargin,data.productDetails.containerBuyerDecimal);
+    
+    await productPage.other(data.productDetails.addKeywordInput);
   });
 });
