@@ -33,15 +33,6 @@ test.describe('Tests', () => {
       data.productDetails.unitName,data.productDetails.selectProductType,data.productDetails.selectProductSubType,
       data.productDetails.purchaseDescription); 
 
-    await productPage.packageDetailsInput(data.productDetails.packageAttributes,data.productDetails.mqo,
-          data.productDetails.mqs,data.productDetails.stackable);     
-    
-    await productPage.pricing(data.productDetails.unitBuyerMargin,data.productDetails.unitBuyerDecimal,
-        data.productDetails.skuBuyerMargin,data.productDetails.skuBuyerDecimal,data.productDetails.palletBuyerMargin,
-        data.productDetails.palletBuyerDecimal,data.productDetails.containerBuyerMargin,data.productDetails.containerBuyerDecimal);
-    
-    await productPage.other(data.productDetails.addKeywordInput);
-
     await productPage.otherInfo(data.productDetails.choosePreferedVendor,data.productDetails.customProductFor,
       data.productDetails.saleable,data.productDetails.markasFavorite,data.productDetails.isaRawMaterial,
       data.productDetails.isaSupplies,data.productDetails.isaPackaging,data.productDetails.isCustomizable,
@@ -53,5 +44,16 @@ test.describe('Tests', () => {
       data.productDetails.openingInventory,data.productDetails.inventoryLocation,data.productDetails.addedBy,
       data.productDetails.addedOn,data.productDetails.showLiveInventory,data.productDetails.greaterThanQty,
       data.productDetails.custominventoryType)
+
+    await productPage.packageDetailsInput(data.productDetails.packageAttributes,data.productDetails.mqo,
+          data.productDetails.mqs,data.productDetails.stackable);     
+    
+    await productPage.pricing(data.productDetails.unitBuyerMargin,data.productDetails.unitBuyerDecimal,
+        data.productDetails.skuBuyerMargin,data.productDetails.skuBuyerDecimal,data.productDetails.palletBuyerMargin,
+        data.productDetails.palletBuyerDecimal,data.productDetails.containerBuyerMargin,data.productDetails.containerBuyerDecimal);
+    
+    await productPage.other(data.productDetails.addKeywordInput);
+
+
   });
 });

@@ -175,6 +175,8 @@ export class Product extends PageObjectModel {
 
     await this.addProduct.waitFor({ state: 'visible', timeout: 15000 })
     await this.addProduct.click();
+    
+    await this.inventory.check();
 
     await this.productCode.fill(productCode);
     await this.productDescription.fill(productDescription);
@@ -270,9 +272,12 @@ async addInventory(inventory,inventoryType,openingInventory,inventoryLocation,
   addedBy,addedOn,showLiveInventory,greaterThanQty,customInventoryType) {
     
   if( inventory === 'true') {
+    await this.inventory.scrollIntoViewIfNeeded();
+    await this.page.waitForTimeout(1000);
+    await this.inventory.hover();
     await this.inventory.check();
-    await this.openingInventory.waitFor({ state: 'visible', timeout: 20000 });
     await this.page.waitForTimeout(2000);
+    await this.openingInventory.waitFor({ state: 'visible', timeout: 20000 });
     await this.openingInventory.fill(openingInventory)    
     await this.inventorySelect.selectOption(inventoryType);
     await this.page.waitForTimeout(2000);
@@ -291,9 +296,6 @@ async addInventory(inventory,inventoryType,openingInventory,inventoryLocation,
 async packageDetailsInput(packageAttributes,mqo,mqs,stackable) {
     if (packageAttributes === 'true') {
       //await this.packageAttributes.check();
-      
-      // Scroll to top of the page
-      await this.page.evaluate(() => window.scrollTo(0, 0));
       await this.packageDetails.click();
       await this.page.waitForTimeout(2000);
       await this.skuPackage.click();
