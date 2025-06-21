@@ -5,6 +5,7 @@ import { LoginPage } from '../models/login';
 import { getTestData } from '../utils/helper';
 import { CommonPage } from '../models/common';
 import { extractExcelDataToJson } from '../utils/excel';
+import { Templates } from '../models/productTemplate';
 
 
 test.describe('Tests', () => {
@@ -13,12 +14,14 @@ test.describe('Tests', () => {
   let loginPage: LoginPage;
   let homePage: HomePage;
   let data: any;
+  let templatePage: Templates;
 
   test.beforeEach(async ({ page }) => {
     commonPage = new CommonPage(page);
     productPage = new Product(page); 
     loginPage = new LoginPage(page);
-    homePage = new HomePage(page);     
+    homePage = new HomePage(page);   
+    templatePage = new Templates(page)  
     data = getTestData();         
   });
 
@@ -46,15 +49,25 @@ test.describe('Tests', () => {
       data.productDetails.addedOn,data.productDetails.showLiveInventory,data.productDetails.greaterThanQty,
       data.productDetails.custominventoryType)
 
-    await productPage.packageDetailsInput(data.productDetails.packageAttributes,data.productDetails.mqo,
+    /*await productPage.packageDetailsInput(data.productDetails.packageAttributes,data.productDetails.mqo,
           data.productDetails.mqs,data.productDetails.stackable);     
     
     await productPage.pricing(data.productDetails.unitBuyerMargin,data.productDetails.unitBuyerDecimal,
         data.productDetails.skuBuyerMargin,data.productDetails.skuBuyerDecimal,data.productDetails.palletBuyerMargin,
         data.productDetails.palletBuyerDecimal,data.productDetails.containerBuyerMargin,data.productDetails.containerBuyerDecimal);
     
-    await productPage.other(data.productDetails.addKeywordInput);
+    await productPage.other(data.productDetails.addKeywordInput);*/
 
     extractExcelDataToJson('./testData/productDetails.xlsx', './testData/productDetails.json');
   });
+
+   test('To add a product template successfully', async () =>{
+    await loginPage.login(data.login.username, data.login.password);
+    
+    //await commonPage.navigateToProductManagement();
+    await commonPage.navigateToTemplate();
+
+    await templatePage.templateInfo()
+
+   })
 });

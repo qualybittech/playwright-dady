@@ -65,6 +65,50 @@ function generateRandomName() {
     return `${first}${last}${uniqueSuffix}`;
   }
 
+  function generateUPC(): string {
+  const digits: number[] = [];
+  // Generate first 11 digits randomly
+  for (let i = 0; i < 11; i++) {
+    digits.push(Math.floor(Math.random() * 10));
+  }
+
+  // Calculate check digit
+  const oddSum = digits
+    .filter((_, i) => i % 2 === 0)
+    .reduce((acc, num) => acc + num, 0);
+  const evenSum = digits
+    .filter((_, i) => i % 2 === 1)
+    .reduce((acc, num) => acc + num, 0);
+
+  const total = (oddSum * 3) + evenSum;
+  const checkDigit = (10 - (total % 10)) % 10;
+
+  digits.push(checkDigit);
+
+  return digits.join('');
+}
+
+// utils/codeGenerator.ts
+
+function generateEAN13(): string {
+  let ean = '';
+
+  // Generate the first 12 digits
+  for (let i = 0; i < 12; i++) {
+    ean += Math.floor(Math.random() * 10);
+  }
+
+  // Calculate the check digit (13th digit)
+  const digits = ean.split('').map(Number);
+  const sum = digits.reduce((acc, digit, idx) => {
+    return acc + digit * (idx % 2 === 0 ? 1 : 3);
+  }, 0);
+
+  const checkDigit = (10 - (sum % 10)) % 10;
+  return ean + checkDigit.toString();
+}
+
+
   function generateRandomNumber(min = 0, max = 1000) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
@@ -115,4 +159,4 @@ function generateRandomName() {
 
     
   }
-export { waitForElement, generateRandomEmail, generateRandomString,getTestData,generateRandomName,generateRandomNumber,generateRandomEmailWithNumber,getOtpFromGmail };
+export { waitForElement, generateRandomEmail, generateRandomString,getTestData,generateRandomName,generateUPC,generateRandomNumber,generateEAN13,generateRandomEmailWithNumber,getOtpFromGmail };
