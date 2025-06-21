@@ -11,13 +11,13 @@
     "productDetails":{
         "productCode": "12",
         "productDescription":"Plastic Film for testing",
-        "upcCode":"123",
-        "eanCode":"456",
+        "upcCode":"",
+        "eanCode":"",
         "skuType":"UNIT",        
         "unitCount":"3",
-        "unitName":"3",
-        "selectProductType":"Plastic Film ",
-        "selectProductSubType": "HDPE Film ",
+        "unitName":"box",
+        "selectProductType":"T-Shirt Bags ",
+        "selectProductSubType": "HDPE Bags (T-Shirt Bags) ",
         "purchaseDescription":"Testing Purpose",
         "choosePreferedVendor":"Dayana Polyplast Inc",
         "customProductFor":"",
@@ -31,8 +31,27 @@
         "productAttributes":
         {
             "productAttributes":"true",
-            "USD/MT":"1",
-            "USD/MTUnit":"USD/mt",
+            "Width":"",
+            "Side Gusset":"",
+            "Length":"",
+
+            "Thickness (Micron)":"0.000000",
+            "GSM":"0.000000",
+            "Cut Waste":"",
+            "Surface Area":"0.000000",
+            "Net Cost":"0.000000",
+            "Net Weight":"0.000000",
+            "Unit / Kg":""
+        },
+        "productAttribute":
+        {
+            "productAttributes":"true",
+            "Width":"",
+            "WidthUnit":"in",
+			"SideGusset":"1",
+			"SideGussetUnit":"in",
+			"Lenth":"1",
+			"LengthUnit":"in",
             "GSM":"200",
             "GSMUnit":"gm/m^2"
         },

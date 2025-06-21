@@ -1,6 +1,6 @@
 import { PageObjectModel } from "./pageObjectModel";
 import { Locator, Page, expect } from '@playwright/test';
-import { generateRandomName } from '../utils/helper';
+import { generateUPC,generateEAN13 } from '../utils/helper';
 
 export class Product extends PageObjectModel {
 
@@ -52,6 +52,12 @@ export class Product extends PageObjectModel {
   inventorySelect:Locator;
   inventory: Locator;
 
+  //Locators for template
+  templateCost: Locator;
+  templateCostValue: Locator;
+  templateDensityValue: Locator;
+
+
   // Locators for Package Details section
   packageAttributes: Locator;
   packageDetails: Locator;
@@ -63,6 +69,7 @@ export class Product extends PageObjectModel {
   mqs: Locator;
   stackableYes: Locator;
   stackableNo: Locator;
+  productConsidered: Locator
   addNewPackage: Locator;
 
 // Locators for Pricing Details section
@@ -75,6 +82,20 @@ export class Product extends PageObjectModel {
   palletBuyerDecimal: Locator;
   containerBuyerMargin: Locator;
   containerBuyerDecimal: Locator; 
+
+//Locator sample
+  width: Locator; 
+  sideGusset: Locator; 
+  length: Locator; 
+
+  thickness: Locator;
+  gsm: Locator;
+  cutWate: Locator;
+  surfaceArea: Locator; 
+
+  netCost: Locator;
+  netWeight: Locator; 
+  unit: Locator;
 
 // Locators for Other Details section
   otherDetails: Locator;
@@ -145,7 +166,29 @@ export class Product extends PageObjectModel {
     this.mqs = this.page.locator('label').filter({hasText: 'MQS'}).first().locator('..').locator('input');
     this.stackableYes = this.page.getByRole('button', { name: 'Yes' });
     this.stackableNo = this.page.getByRole('button', { name: 'No' });
+    this.productConsidered = this.page.getByRole('button', { name: 'SKU Product : Considered' })
     this.addNewPackage = this.page.getByRole('button', { name: 'Add New Package' });
+
+    //locators for template
+    this.templateCost = this.page.locator('strong', { hasText: 'Template Cost :' });
+    this.templateDensityValue = this.page.locator('div.primary-text:has(strong:text("Template Density :")) span')
+    this.templateCostValue = this.page.locator('div.primary-text:has(strong:text("Template Cost :")) span.price-text')
+
+    //
+  this.width = this.page.getByText('Width')
+  this.sideGusset = this.page.getByText('Side Gusset')
+  this.length = this.page. getByText('Length')
+
+  this.thickness = this.page.getByText('Thickness (Micron)')
+  this.gsm=this.page.getByText('GSM')
+  this.cutWate= this.page.getByText('Cut Waste')
+  this.surfaceArea = this.page.getByText('Surface Area', { exact: true })
+
+  this.netCost = this.page.getByText('Net Cost')
+  this.netWeight = this.page.getByText('Net Weight')
+  this.unit= this.page.getByText('Unit / Kg')
+
+
     
     // Locators for Pricing Details section
     this.pricingDetails = this.page.getByText('Pricing Details', { exact: true });
@@ -180,12 +223,14 @@ export class Product extends PageObjectModel {
 
     await this.productCode.fill(productCode);
     await this.productDescription.fill(productDescription);
-    await this.upcCode.fill(upcCode);
-    await this.eanCode.fill(eanCode);  
+    const upc = upcCode || generateUPC();
+    await this.upcCode.fill(upc);
+    const ean = eanCode || generateEAN13();
+    await this.eanCode.fill(ean);  
     await this.skuType.selectOption(skuType);    
 
     await this.unitCount.fill(unitCount);
-    await this.unitName.fill(unitName)
+
 
     await this.selectProductType.click();
     await this.page.locator('span').filter({ hasText: selectProductType }).first().click();
@@ -194,6 +239,9 @@ export class Product extends PageObjectModel {
     await this.page.locator('span').filter({ hasText: selectProductSubType }).first().click();
     
     await this.purchaseDescription.fill(purchaseDescription)
+
+    await this.unitName.fill(unitName)
+    await expect(unitName).toBe(unitName);
 
   }
 
@@ -240,6 +288,17 @@ export class Product extends PageObjectModel {
     await this.isQuickCheckoutEligible.check();
     }
 
+   /* await expect(this.width).toHaveText('Width');
+    await expect(this.sideGusset).toHaveText('Side Gusset');
+    await expect(this.length).toHaveText('Length');
+    await expect(this.thickness).toHaveText('Thickness (Micron)');
+    await expect(this.gsm).toHaveText('GSM');
+    await expect(this.cutWate).toHaveText('Cut Waste');
+    await expect(this.surfaceArea).toHaveText('Surface Area');
+    await expect(this.netCost).toHaveText('Net Cost');
+    await expect(this.netWeight).toHaveText('Net Weight');
+    await expect(this.unit).toHaveText('Unit / Kg');*/
+
     }
     
   // Method to fill product attributes
@@ -251,16 +310,32 @@ export class Product extends PageObjectModel {
       await this.page.waitForTimeout(2000);
 
       const entries = Object.entries(productAttributes);       
-       for (let i = 1; i < entries.length; i+=2) {
+       for (let i = 1; i < entries.length; i+=7) {
         const [pairKey1,pairValue1] = entries[i];
         const [pairKey2,pairValue2] = entries[i + 1] ||[];
+        const [pairKey3,pairValue3] = entries[i + 2] ||[];
+        const [pairKey4,pairValue4] = entries[i + 3] ||[];
+        const [pairKey5,pairValue5] = entries[i + 4] ||[];
+        const [pairKey6,pairValue6] = entries[i + 5] ||[];
+        const [pairKey7,pairValue7] = entries[i + 6] ||[];
+        const [pairKey8,pairValue8] = entries[i + 7] ||[];
         console.log('pair1:', pairKey1, pairValue1);
         console.log('pair2:', pairKey2, pairValue2);
         
         await this.selectProductunit.click();
         await this.page.locator('span').filter({ hasText: pairKey1 }).first().click();
         await this.page.waitForTimeout(2000);
-
+        
+        //await this.page.locator('label').filter({hasText: pairKey1}).first().locator('..').locator('input').fill('0.000000')
+        await expect(this.page.locator('label').filter({hasText: pairKey1}).first().locator('..').locator('input')).toHaveValue('')
+        //await this.page.locator('label').filter({hasText: pairKey2}).first().locator('..').locator('input').fill('0.000000')
+        await expect(this.page.locator('label').filter({hasText: pairKey2}).first().locator('..').locator('input')).toHaveValue('')
+        await expect(this.page.locator('label').filter({hasText: pairKey3}).first().locator('..').locator('input')).toHaveValue('')
+        await expect(this.page.locator('label').filter({hasText: pairKey4}).first().locator('..').locator('input')).toHaveValue('0.000000')
+        await expect(this.page.locator('label').filter({hasText: pairKey5}).first().locator('..').locator('input')).toHaveValue('')
+        await expect(this.page.locator('label').filter({hasText: pairKey6}).first().locator('..').locator('input')).toHaveValue('0.000000')
+        await expect(this.page.locator('label').filter({hasText: pairKey7}).first().locator('..').locator('input')).toHaveValue('0.000000')
+        await expect(this.page.locator('label').filter({hasText: pairKey8}).first().locator('..').locator('input')).toHaveValue('')
         await this.page.locator('label').filter({hasText: pairKey1}).first().locator('..').locator('input').fill(String(pairValue1));
         await this.page.locator('label').filter({hasText: String(pairValue2)}).first().locator('..').locator('select');
       }
@@ -290,6 +365,10 @@ async addInventory(inventory,inventoryType,openingInventory,inventoryLocation,
         await this.customInventoryType.selectOption(customInventoryType);
       }
   }
+  
+  // verification for density value and density cost
+  await expect(this.templateDensityValue).toHaveText('1037590.000 gm/m^3');
+  await expect(this.templateCostValue).toHaveText(' 1326.148 USD/mtt');
 };
 
 // Method to fill package details
@@ -300,6 +379,8 @@ async packageDetailsInput(packageAttributes,mqo,mqs,stackable) {
       await this.page.waitForTimeout(2000);
       await this.skuPackage.click();
       await this.yesButton.click();
+
+      
       await this.mqoBulk.fill(mqo);
       await this.mqs.fill(mqs);
       if( stackable !== 'true') {
@@ -307,6 +388,8 @@ async packageDetailsInput(packageAttributes,mqo,mqs,stackable) {
       }
       await this.addNewPackage.click();
     }
+    const valuePage2 = await this.productConsidered.textContent();
+    await expect(this.productConsidered).toHaveText('box');//toHaveText
     }
 
 // Method to fill pricing details
