@@ -15,6 +15,7 @@
   "dependencies": {
     "imap-simple": "^5.1.0",
     "mailparser": "^3.7.2",
-    "playwright": "^1.51.1"
+    "playwright": "^1.51.1",
+    "xlsx": "^0.18.5"
   }
 }

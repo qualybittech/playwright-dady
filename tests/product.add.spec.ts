@@ -4,6 +4,7 @@ import { HomePage } from '../models/homePage';
 import { LoginPage } from '../models/login';
 import { getTestData } from '../utils/helper';
 import { CommonPage } from '../models/common';
+import { extractExcelDataToJson } from '../utils/excel';
 
 
 test.describe('Tests', () => {
@@ -54,6 +55,6 @@ test.describe('Tests', () => {
     
     await productPage.other(data.productDetails.addKeywordInput);
 
-
+    extractExcelDataToJson('./testData/productDetails.xlsx', './testData/productDetails.json');
   });
 });
