@@ -1,8 +1,9 @@
 {
-    "URL": "https://dev.dadyin.com",
+    "URL": "https://dev.dadyin.com/#/signin",
     "login": {
-        "username": "baburgn12@gmail.com",
-        "password": "Celerio@3535"
+        "username": "test_admin@dadyin.com",
+        "password": "admin@",
+        "bussinessAccount": "Dayana Polyplast Inc"
     },
     "invalidlogin":{
         "username": "invalid@gmail.com",

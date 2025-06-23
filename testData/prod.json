@@ -31,29 +31,10 @@
         "productAttributes":
         {
             "productAttributes":"true",
-            "Width":"",
-            "Side Gusset":"",
-            "Length":"",
-
-            "Thickness (Micron)":"0.000000",
             "GSM":"0.000000",
-            "Cut Waste":"",
-            "Surface Area":"0.000000",
+            "GSMUnit":"gm/m^2",
             "Net Cost":"0.000000",
-            "Net Weight":"0.000000",
-            "Unit / Kg":""
-        },
-        "productAttribute":
-        {
-            "productAttributes":"true",
-            "Width":"",
-            "WidthUnit":"in",
-			"SideGusset":"1",
-			"SideGussetUnit":"in",
-			"Lenth":"1",
-			"LengthUnit":"in",
-            "GSM":"200",
-            "GSMUnit":"gm/m^2"
+            "Net Cost Unit":"USD"
         },
         "inventory":"true",
         "inventoryType":"UNIT",
@@ -76,6 +57,8 @@
         "palletBuyerDecimal":"0.25",
         "containerBuyerMargin":"70",
         "containerBuyerDecimal":"0.25",
-        "addKeywordInput":"mfr"
+        "addKeywordInput":"mfr",
+        "templateCost":" 1326.148 USD/mt",
+        "templateDenisty":"1037590.000 gm/m^3"
     }
 }

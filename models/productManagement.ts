@@ -52,7 +52,7 @@ export class Product extends PageObjectModel {
   inventorySelect:Locator;
   inventory: Locator;
 
-  //Locators for template
+  //Locators for Product pricing section
   templateCost: Locator;
   templateCostValue: Locator;
   templateDensityValue: Locator;
@@ -187,8 +187,6 @@ export class Product extends PageObjectModel {
   this.netCost = this.page.getByText('Net Cost')
   this.netWeight = this.page.getByText('Net Weight')
   this.unit= this.page.getByText('Unit / Kg')
-
-
     
     // Locators for Pricing Details section
     this.pricingDetails = this.page.getByText('Pricing Details', { exact: true });
@@ -310,34 +308,22 @@ export class Product extends PageObjectModel {
       await this.page.waitForTimeout(2000);
 
       const entries = Object.entries(productAttributes);       
-       for (let i = 1; i < entries.length; i+=7) {
+       for (let i = 1; i < entries.length; i+=2) {
         const [pairKey1,pairValue1] = entries[i];
         const [pairKey2,pairValue2] = entries[i + 1] ||[];
-        const [pairKey3,pairValue3] = entries[i + 2] ||[];
-        const [pairKey4,pairValue4] = entries[i + 3] ||[];
-        const [pairKey5,pairValue5] = entries[i + 4] ||[];
-        const [pairKey6,pairValue6] = entries[i + 5] ||[];
-        const [pairKey7,pairValue7] = entries[i + 6] ||[];
-        const [pairKey8,pairValue8] = entries[i + 7] ||[];
         console.log('pair1:', pairKey1, pairValue1);
         console.log('pair2:', pairKey2, pairValue2);
-        
-        await this.selectProductunit.click();
+        console.log(await this.page.locator('label').filter({hasText: pairKey1}).first().locator('..').locator('input').getAttribute('value'));
+        // Assume 'page' is your Playwright Page object and 'textBoxSelector' is the selector for your textbox
+      const textValue = await this.page.locator('label').filter({hasText: pairKey1}).first().locator('..').locator('input').inputValue();
+      console.log("textValue:",textValue);
+      await expect(textValue).toBe(String(pairValue1));
+
+        /*await this.selectProductunit.click();
         await this.page.locator('span').filter({ hasText: pairKey1 }).first().click();
         await this.page.waitForTimeout(2000);
-        
-        //await this.page.locator('label').filter({hasText: pairKey1}).first().locator('..').locator('input').fill('0.000000')
-        await expect(this.page.locator('label').filter({hasText: pairKey1}).first().locator('..').locator('input')).toHaveValue('')
-        //await this.page.locator('label').filter({hasText: pairKey2}).first().locator('..').locator('input').fill('0.000000')
-        await expect(this.page.locator('label').filter({hasText: pairKey2}).first().locator('..').locator('input')).toHaveValue('')
-        await expect(this.page.locator('label').filter({hasText: pairKey3}).first().locator('..').locator('input')).toHaveValue('')
-        await expect(this.page.locator('label').filter({hasText: pairKey4}).first().locator('..').locator('input')).toHaveValue('0.000000')
-        await expect(this.page.locator('label').filter({hasText: pairKey5}).first().locator('..').locator('input')).toHaveValue('')
-        await expect(this.page.locator('label').filter({hasText: pairKey6}).first().locator('..').locator('input')).toHaveValue('0.000000')
-        await expect(this.page.locator('label').filter({hasText: pairKey7}).first().locator('..').locator('input')).toHaveValue('0.000000')
-        await expect(this.page.locator('label').filter({hasText: pairKey8}).first().locator('..').locator('input')).toHaveValue('')
         await this.page.locator('label').filter({hasText: pairKey1}).first().locator('..').locator('input').fill(String(pairValue1));
-        await this.page.locator('label').filter({hasText: String(pairValue2)}).first().locator('..').locator('select');
+        await this.page.locator('label').filter({hasText: String(pairValue2)}).first().locator('..').locator('select');*/
       }
 
     }
@@ -366,10 +352,13 @@ async addInventory(inventory,inventoryType,openingInventory,inventoryLocation,
       }
   }
   
-  // verification for density value and density cost
-  await expect(this.templateDensityValue).toHaveText('1037590.000 gm/m^3');
-  await expect(this.templateCostValue).toHaveText(' 1326.148 USD/mtt');
 };
+
+async verifyProductPricing(templateCost,templateDenisty) {
+  // verification for density value and density cost
+  await expect(this.templateDensityValue).toHaveText(templateDenisty);
+  await expect(this.templateCostValue).toHaveText(templateCost);
+}
 
 // Method to fill package details
 async packageDetailsInput(packageAttributes,mqo,mqs,stackable) {

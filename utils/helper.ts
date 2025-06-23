@@ -3,12 +3,12 @@ import { simpleParser } from 'mailparser';
 
 function getTestData(){
     let environment = getEnvVariable();
-    if(environment === 'test'){
-        let path = './testData/test.json';
+    if(environment === 'prod'){
+        let path = './testData/prod.json';
         let data = readDataFromJsonFile(path);
         return data;
-    } else if(environment === 'prod'){
-        let path = './testData/prod.json';
+    } else{
+        let path = './testData/'+environment+'.json';
         let data = readDataFromJsonFile(path);
         return data;
     }

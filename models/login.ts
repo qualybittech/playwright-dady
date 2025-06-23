@@ -12,7 +12,7 @@ export class LoginPage  extends PageObjectModel {
         await this.page.goto(url);
     }   
 
-    async login(email, password) {
+    async login(email, password,bussinessAccount) {
         await this.navigateTo(this.data.URL);
         await this.emailInput.fill(email);
         await this.passwordInput.fill(password);
@@ -23,5 +23,33 @@ export class LoginPage  extends PageObjectModel {
                 await this.page.locator('a').filter({ hasText: email}).first().click();
                 await this.continueButton.click();
             }
+
+        // Wait for the card list to appear
+       /* const cardList = this.page.locator('div.card-list');
+        await cardList.waitFor();
+
+        // Get all business account cards
+        const cards = cardList.locator('div.businessaccount-card');
+        const count = await cards.count();
+        console.log(`Found ${count} business account cards.`);
+        for (let i = 0; i < count; i++) {
+            const card = cards.nth(i);
+            // The span containing the business account name is inside: div.font-size-14.mt-2 > span.text-dark
+            const accountSpan = card.locator('div.font-size-14.mt-2 span.text-dark');
+            const text = await accountSpan.textContent();
+            if (text && text.trim().includes(bussinessAccount)) {
+                await card.scrollIntoViewIfNeeded();
+                await card.click();
+                break;
+            }
+            // Optionally scroll to the next card (not strictly needed, but can help with visibility)
+            if (i < count - 1) {
+                await cards.nth(i + 1).scrollIntoViewIfNeeded();
+            }
+        }*/
+
+        //await this.page.locator('span').filter({ hasText: bussinessAccount}).scrollIntoViewIfNeeded();
+        //await this.page.locator('span').filter({ hasText: bussinessAccount}).first().click();
+        
     }
 }
