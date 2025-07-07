@@ -2,11 +2,13 @@
     "URL": "https://www.dadyin.com/#/signin",
     "login": {
         "username": "baburgn12@gmail.com",
-        "password": "Celerio@3535"
+        "password": "Celerio@3535",
+        "bussinessAccount": "bsquare"
     },
     "invalidlogin":{
         "username": "invalid@gmail.com",
-        "password": "incorrect"
+        "password": "incorrect",
+        "bussinessAccount": "bsquare"
     },
     "productDetails":{
         "productCode": "12",

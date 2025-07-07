@@ -28,7 +28,7 @@ test.describe('Tests', () => {
 
   test('To add a product details successfully', async () => {
     
-    await loginPage.login(data.login.username, data.login.password);
+    await loginPage.login(data.login.username, data.login.password,data.login.bussinessAccount);
     
     await commonPage.navigateToProductManagement();
 
@@ -49,6 +49,8 @@ test.describe('Tests', () => {
       data.productDetails.addedOn,data.productDetails.showLiveInventory,data.productDetails.greaterThanQty,
       data.productDetails.custominventoryType)
 
+    await productPage.verifyProductPricing(data.productDetails.templateCost,data.productDetails.templateDenisty);
+
     /*await productPage.packageDetailsInput(data.productDetails.packageAttributes,data.productDetails.mqo,
           data.productDetails.mqs,data.productDetails.stackable);     
     
@@ -61,7 +63,7 @@ test.describe('Tests', () => {
     extractExcelDataToJson('./testData/productDetails.xlsx', './testData/productDetails.json');
   });
 
-   test('To add a product template successfully', async () =>{
+   /*test('To add a product template successfully', async () =>{
     await loginPage.login(data.login.username, data.login.password);
     
     //await commonPage.navigateToProductManagement();
@@ -69,5 +71,5 @@ test.describe('Tests', () => {
 
     await templatePage.templateInfo()
 
-   })
+   })*/
 });

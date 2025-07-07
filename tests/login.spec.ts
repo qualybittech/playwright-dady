@@ -15,12 +15,12 @@ test.describe('Login Tests', () => {
     });
 
     test('Successful login with valid credentials', async () => {
-        await loginPage.login(data.login.username, data.login.password);
+        await loginPage.login(data.login.username, data.login.password,data.login.bussinessAccount);
         await homePage.logout();
     });
 
     test('Unsuccessful login with invalid credentials', async () => {
-        await loginPage.login(data.invalidlogin.username, data.invalidlogin.password);
+        await loginPage.login(data.invalidlogin.username, data.invalidlogin.password,data.invalidlogin.bussinessAccount);
         // Add assertions to verify error message is displayed
         await expect(loginPage.unauthorisedMessage).toHaveCount(1);
     });
