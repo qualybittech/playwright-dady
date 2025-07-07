@@ -6,6 +6,7 @@ import { getTestData } from '../utils/helper';
 import { CommonPage } from '../models/common';
 import { extractExcelDataToJson } from '../utils/excel';
 import { Templates } from '../models/productTemplate';
+import { EnvironmentManager } from '../utils/environmentManager';
 
 
 test.describe('Tests', () => {
@@ -15,6 +16,8 @@ test.describe('Tests', () => {
   let homePage: HomePage;
   let data: any;
   let templatePage: Templates;
+  let loginCreds: any;
+  let envManager: EnvironmentManager;
 
   test.beforeEach(async ({ page }) => {
     commonPage = new CommonPage(page);
@@ -22,17 +25,20 @@ test.describe('Tests', () => {
     loginPage = new LoginPage(page);
     homePage = new HomePage(page);   
     templatePage = new Templates(page)  
+
+    envManager = EnvironmentManager.getInstance();
+    loginCreds = envManager.getLoginCredentials();
     data = getTestData();         
   });
 
 
   test('To add a product details successfully', async () => {
     
-    await loginPage.login(data.login.username, data.login.password,data.login.bussinessAccount);
-    
+    await loginPage.login(loginCreds.username, loginCreds.password, loginCreds.bussinessAccount);
+
     await commonPage.navigateToProductManagement();
 
-    await productPage.productDetails(data.productDetails.productCode,data.productDetails.productDescription,
+    /*await productPage.productDetails(data.productDetails.productCode,data.productDetails.productDescription,
       data.productDetails.upcCode,data.productDetails.eanCode,data.productDetails.skuType,data.productDetails.unitCount,
       data.productDetails.unitName,data.productDetails.selectProductType,data.productDetails.selectProductSubType,
       data.productDetails.purchaseDescription); 
@@ -59,8 +65,6 @@ test.describe('Tests', () => {
         data.productDetails.palletBuyerDecimal,data.productDetails.containerBuyerMargin,data.productDetails.containerBuyerDecimal);
     
     await productPage.other(data.productDetails.addKeywordInput);*/
-
-    extractExcelDataToJson('./testData/productDetails.xlsx', './testData/productDetails.json');
   });
 
    /*test('To add a product template successfully', async () =>{

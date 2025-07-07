@@ -1,4 +1,5 @@
 //import { type Locator, type Page ,type expect} from '@playwright/test';
+import { EnvironmentManager } from "../utils/environmentManager";
 import { PageObjectModel } from "./pageObjectModel";
 
 export class LoginPage  extends PageObjectModel {
@@ -7,13 +8,23 @@ export class LoginPage  extends PageObjectModel {
     signInButton = this.page.getByRole('button', { name: 'Sign In' });
     continueButton = this.page.getByRole('button', { name: 'Continue' });
     unauthorisedMessage = this.page.locator('text=Unauthorized');
+    envManager = EnvironmentManager.getInstance();
+    
+    async navigateTo(url?: string) {
+        // If no URL is provided, use the base URL from the environment
+        const targetUrl = url || this.data.URL;
+        console.log(`Navigating to: ${targetUrl}`);
+        await this.page.goto(targetUrl);
+    }
 
-    async navigateTo(url: string) {
-        await this.page.goto(url);
-    }   
+    async navigateToSignin() {
+        // Navigate to the full login URL with hash fragment
+        await this.navigateTo(this.envManager.getBaseUrl());
+    }
 
     async login(email, password,bussinessAccount) {
-        await this.navigateTo(this.data.URL);
+        // Navigate to login page using the full URL from environment config
+        await this.navigateToSignin();
         await this.emailInput.fill(email);
         await this.passwordInput.fill(password);
         await this.signInButton.click(); 

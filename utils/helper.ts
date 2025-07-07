@@ -1,17 +1,46 @@
 import imaps from 'imap-simple';
 import { simpleParser } from 'mailparser';
+import { extractExcelDataToJson, extractAllSheetsToJson, extractSpecificSheets, getExcelSheetInfo } from './excel';
+import { EnvironmentManager, getEnvironmentConfig } from './environmentManager';
 
 function getTestData(){
-    let environment = getEnvVariable();
-    if(environment === 'prod'){
-        let path = './testData/prod.json';
-        let data = readDataFromJsonFile(path);
+    const envManager = EnvironmentManager.getInstance();
+    const environment = envManager.getEnvironmentName();
+    
+    // Load product details if available
+    if (environment === 'prod') {
+        const path = `./testData/${environment}`;
+        // Use the updated function that skips the header row
+        extractAllSheetsToJson(`${path}/productTemplate.xlsx`, `${path}/productDetails.json`);
+        const data = readDataFromJsonFile(`${path}/productDetails.json`);
         return data;
-    } else{
-        let path = './testData/'+environment+'.json';
-        let data = readDataFromJsonFile(path);
-        return data;
+    } else {
+        return envManager.getConfig();
     }
+}
+
+function getTestDataFromAllSheets(){
+    const envManager = EnvironmentManager.getInstance();
+    const environment = envManager.getEnvironmentName();
+    const path = `./testData/${environment}`;
+    
+    // Extract all sheets from Excel file
+    const allSheetsData = extractAllSheetsToJson(`${path}/productTemplate.xlsx`, `${path}/allSheetsData.json`);
+    return allSheetsData;
+}
+
+function getTestDataFromSpecificSheets(sheetNames: string[]){
+    const envManager = EnvironmentManager.getInstance();
+    const environment = envManager.getEnvironmentName();
+    const path = `./testData/${environment}`;
+    
+    // Extract specific sheets from Excel file
+    const selectedSheetsData = extractSpecificSheets(`${path}/productTemplate.xlsx`, `${path}/selectedSheetsData.json`, sheetNames);
+    return selectedSheetsData;
+}
+
+function getExcelInfo(excelFilePath: string) {
+    return getExcelSheetInfo(excelFilePath);
 }
 
 function readDataFromJsonFile(filePath: string): any {
@@ -26,8 +55,7 @@ function readDataFromJsonFile(filePath: string): any {
 }
 
 function getEnvVariable() {
-    const environment = process.env.ENV || 'test';
-    return environment;
+    return EnvironmentManager.getInstance().getEnvironmentName();
 }
 function waitForElement(selector: string, page: any, timeout: number = 5000) {
     return page.waitForSelector(selector, { timeout });
@@ -159,4 +187,18 @@ function generateEAN13(): string {
 
     
   }
-export { waitForElement, generateRandomEmail, generateRandomString,getTestData,generateRandomName,generateUPC,generateRandomNumber,generateEAN13,generateRandomEmailWithNumber,getOtpFromGmail };
+export { 
+  waitForElement, 
+  generateRandomEmail, 
+  generateRandomString,
+  getTestData,
+  getTestDataFromAllSheets,
+  getTestDataFromSpecificSheets,
+  getExcelInfo,
+  generateRandomName,
+  generateUPC,
+  generateRandomNumber,
+  generateEAN13,
+  generateRandomEmailWithNumber,
+  getOtpFromGmail 
+};
