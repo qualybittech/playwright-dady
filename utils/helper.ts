@@ -6,17 +6,16 @@ import { EnvironmentManager, getEnvironmentConfig } from './environmentManager';
 function getTestData(){
     const envManager = EnvironmentManager.getInstance();
     const environment = envManager.getEnvironmentName();
-    
-    // Load product details if available
-    if (environment === 'prod') {
         const path = `./testData/${environment}`;
-        // Use the updated function that skips the header row
-        extractAllSheetsToJson(`${path}/productTemplate.xlsx`, `${path}/productDetails.json`);
         const data = readDataFromJsonFile(`${path}/productDetails.json`);
         return data;
-    } else {
-        return envManager.getConfig();
-    }
+}
+
+function setTestData(){
+    const envManager = EnvironmentManager.getInstance();
+    const environment = envManager.getEnvironmentName();
+    const path = `./testData/${environment}`;
+    extractAllSheetsToJson(`${path}/productTemplate.xlsx`, `${path}/productDetails.json`);   
 }
 
 function getTestDataFromAllSheets(){
@@ -83,7 +82,7 @@ function generateRandomString(length: number): string {
 
 function generateRandomName() {
     const firstNames = ['Luna', 'Jack', 'Ava', 'Noah', 'Mia', 'Leo', 'Zoe', 'Max'];
-    const lastNames = ['Taylor', 'Morgan', 'Bailey', 'Rivera', 'Campbell', 'Adams', 'Gray', 'Bennett'];
+    const lastNames = ['Taylor', 'Morgan', 'Bailey', 'Rivera', 'Campbell', 'AdAMS', 'Gray', 'Bennett'];
   
     const first = firstNames[Math.floor(Math.random() * firstNames.length)];
     const last = lastNames[Math.floor(Math.random() * lastNames.length)];
@@ -187,10 +186,134 @@ function generateEAN13(): string {
 
     
   }
+
+  function getProductTestData(){
+    const envManager = EnvironmentManager.getInstance();
+    const environment = envManager.getEnvironmentName();
+
+        const path = `./testData/${environment}`;
+        // Use the updated function that skips the header row and extracts all sheets
+        extractAllSheetsToJson(`${path}/productTemplate.xlsx`, `${path}/productDetails.json`);
+        const allSheetsData = readDataFromJsonFile(`${path}/productDetails.json`);
+        
+        // Return the first row of productDetails sheet as the main product data
+        // and combine with other sheets data
+        const productData = allSheetsData.productDetails;
+        //const pricingData = allSheetsData.pricingDetails ? allSheetsData.pricingDetails[0] : {};
+        //const packageData = allSheetsData.packageDetails ? allSheetsData.packageDetails[0] : {};
+        
+        // Combine all data into a single object for easier access
+        return allSheetsData /*{
+            productDetails: {
+                // Basic product information
+                productCode: productData.ProductCode || '',
+                productDescription: productData.ProductDescription || '',
+                upcCode: productData.UPCCode || '',
+                eanCode: productData.EANCode || '',
+                skuType: productData.SKUType || '',
+                unitCount: productData.UnitCountSKU || '',
+                unitName: productData.UnitName || '',
+                selectProductType: productData.ProductType || '',
+                selectProductSubType: productData.ProductSubtype || '',
+                purchaseDescription: productData.PurchaseDescription || '',
+                
+                // Other info
+                choosePreferedVendor: productData.Choosepreferedvendor || '',
+                customProductFor: productData.CustomProductfor || '',
+                saleable: productData.SaleableNonSaleable === 'Saleable' ? 'true' : 'false',
+                markasFavorite: productData.Markasfav === 'Yes' ? 'true' : 'false',
+                isaRawMaterial: productData.IsaRawmaterial === 'Yes' ? 'true' : 'false',
+                isaSupplies: productData.IsaSupplies === 'Yes' ? 'true' : 'false',
+                isaPackaging: productData.IsaPackage === 'Yes' ? 'true' : 'false',
+                isCustomizable: productData.Customizable === 'Yes' ? 'true' : 'false',
+                displayInQuickCheckout: productData['DisplayinQuick Checkout'] === 'Yes' ? 'true' : 'false',
+                
+                // Product attributes
+                productAttributes: productData.ProductAttribute === 'Yes' ? 'true' : 'false',
+                
+                // Inventory details
+                inventory: productData.Inventory === 'Yes' ? 'true' : 'false',
+                inventoryType: productData.ExactApproxInventory || '',
+                openingInventory: productData.OpeningInventory || '',
+                inventoryLocation: productData.InventoryLocation || '',
+                addedBy: productData.AddedBy || '',
+                addedOn: productData.AddedOn || '',
+                showLiveInventory: productData.LiveInventory || '',
+                greaterThanQty: '', // Not found in data, using empty string
+                custominventoryType: productData.ExactApproxInventory || '',
+                
+                // Pricing details
+                templateCost: productData.CostUnitUSD || '',
+                templateDenisty: productData.NetWeightgm || '',
+                
+                // Package details
+                packageAttributes: packageData.PackageName || '',
+                mqo: '', // Not found in data
+                mqs: '', // Not found in data
+                stackable: '', // Not found in data
+                
+                // Pricing from pricing sheet
+                unitBuyerMargin: pricingData.Margin || '',
+                unitBuyerDecimal: pricingData.Decimal || '',
+                skuBuyerMargin: pricingData.Margin_1 || '',
+                skuBuyerDecimal: pricingData.Decimal_1 || '',
+                palletBuyerMargin: pricingData.Margin_2 || '',
+                palletBuyerDecimal: pricingData.Decimal_2 || '',
+                containerBuyerMargin: pricingData.Margin_3 || '',
+                containerBuyerDecimal: pricingData.Decimal_3 || '',
+                
+                // Other
+                addKeywordInput: '' // Not found in data
+            },
+            // Keep original structure for backward compatibility
+            ...envManager.getConfig()
+        };*/
+    } 
+
+// Utility functions for data-driven testing
+function getTestDataSubset(startIndex: number = 0, count?: number): any {
+    const allData = getTestData();
+    const endIndex = count ? startIndex + count : allData.productDetails.length;
+    return {
+        ...allData,
+        productDetails: allData.productDetails.slice(startIndex, endIndex)
+    };
+}
+
+function getTestDataByProductType(productType: string): any {
+    const allData = getTestData();
+    return {
+        ...allData,
+        productDetails: allData.productDetails.filter((product: any) => 
+            product.ProductType === productType
+        )
+    };
+}
+
+function getTestDataByCategory(category: string): any {
+    const allData = getTestData();
+    return {
+        ...allData,
+        productDetails: allData.productDetails.filter((product: any) => 
+            product.ProductCategory === category
+        )
+    };
+}
+
+function getRandomTestData(count: number = 1): any {
+    const allData = getTestData();
+    const shuffled = allData.productDetails.sort(() => 0.5 - Math.random());
+    return {
+        ...allData,
+        productDetails: shuffled.slice(0, count)
+    };
+}
+
 export { 
   waitForElement, 
   generateRandomEmail, 
   generateRandomString,
+  setTestData,
   getTestData,
   getTestDataFromAllSheets,
   getTestDataFromSpecificSheets,
@@ -200,5 +323,10 @@ export {
   generateRandomNumber,
   generateEAN13,
   generateRandomEmailWithNumber,
-  getOtpFromGmail 
+  getOtpFromGmail,
+  getProductTestData,
+  getTestDataSubset,
+  getTestDataByProductType,
+  getTestDataByCategory,
+  getRandomTestData
 };
