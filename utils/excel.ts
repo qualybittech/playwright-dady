@@ -35,11 +35,16 @@ export function extractAllSheetsToJson(excelFilePath: string, jsonOutputPath: st
         defval: '', 
         range: 1 // Skip the first row (0-indexed, so 1 means start from row 2)
       });
-
+      // Convert JSON data to string format
+      // This is useful if you want to store the data as strings in the output JSON
+      const jsonDataStr = convertJsonDataToString(jsonData);
       // Store data with sheet name as key
-      allSheetsData[sheetName] = jsonData;
+      //allSheetsData[sheetName] = jsonData;
+      allSheetsData[sheetName] = jsonDataStr;
       console.log(`Sheet '${sheetName}' contains ${jsonData.length} rows of data`);
     });
+
+    
 
     // Write JSON to file
     fs.writeFileSync(jsonOutputPath, JSON.stringify(allSheetsData, null, 2), 'utf-8');
@@ -152,4 +157,14 @@ export function getExcelSheetInfo(excelFilePath: string) {
     console.error(`Error reading Excel file info: ${error}`);
     throw error;
   }
+}
+
+export function convertJsonDataToString(jsonData: any[]): { [key: string]: string }[] {
+  return jsonData.map(row => {
+    const stringRow: { [key: string]: string } = {};
+    for (const [key, value] of Object.entries(row)) {
+      stringRow[key] = String(value);
+    }
+    return stringRow;
+  });
 }

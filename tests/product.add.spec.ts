@@ -33,29 +33,33 @@ test.describe('Tests', () => {
     templatePage = new Templates(page);
   });
 
-   test.describe.parallel('Product Tests', () => {
+   //test.describe.parallel('Product Tests', () => {
       // Method 1: Run test for each product in the data array
-    const data = getTestData();
-      data.productDetails.forEach((productData: any, index: number) => {
+    data = getTestData();
+    data.productDetails.forEach((productData: any, index: number) => {
         test(`To add a product details successfully - Dataset ${index + 1} (${productData.ProductCode})`, async () => {
+        //test(`To add a product details successfully - Dataset`, async () => {
   
-      //await loginPage.login(loginCreds.username, loginCreds.password, loginCreds.bussinessAccount);
+      await loginPage.login(loginCreds.username, loginCreds.password, loginCreds.bussinessAccount);
       
       // Access current iteration data
-      console.log(`=== Running Test for Dataset ${index + 1} ===`);
+      /*console.log(`=== Running Test for Dataset ${index + 1} ===`);
       console.log("Product Code:", productData.ProductCode);
       console.log("Product Description:", productData?.ProductDescription);
       console.log("UPC Code:", productData?.UPCCode);
-      console.log("Product Type:", productData?.ProductType);
+      console.log("Product Type:", productData?.ProductType);*/
     
-      /*await commonPage.navigateToProductManagement();
+      await commonPage.navigateToProductManagement();
 
-      await productPage.productDetails(productData.productCode,productData.productDescription,
-        productData.upcCode,productData.eanCode,productData.skuType,productData.unitCount,
-        productData.unitName,productData.selectProductType,productData.selectProductSubType,
-        productData.purchaseDescription); 
+      /*await productPage.productDetails('1234','test','12346789789','12346789789',
+      'UNIT','Corrugated Box','unit','','','12346789789');*/
+ 
+      await productPage.productDetails(productData.ProductCode,productData.ProductDescription,
+        productData.UPCCode,productData.EANCode,productData.SKUType,productData.UnitCountSKU,
+        productData.UnitName,productData.ProductType,productData.ProductSubtype,
+        productData.ProductDescription); 
 
-      await productPage.otherInfo(productData.choosePreferedVendor,productData.customProductFor,
+      /*await productPage.otherInfo(productData.choosePreferedVendor,productData.customProductFor,
         productData.saleable,productData.markasFavorite,productData.isaRawMaterial,
         productData.isaSupplies,productData.isaPackaging,productData.isCustomizable,
         productData.displayInQuickCheckout)
@@ -70,7 +74,7 @@ test.describe('Tests', () => {
       await productPage.verifyProductPricing(productData.templateCost,productData.templateDenisty);*/
   });
   });
-});
+//});
    /*test('To add a product template successfully', async () =>{
     await loginPage.login(data.login.username, data.login.password);
     
