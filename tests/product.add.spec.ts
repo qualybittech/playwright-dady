@@ -59,19 +59,65 @@ test.describe('Tests', () => {
         productData.UnitName,productData.ProductType,productData.ProductSubtype,
         productData.ProductDescription); 
 
-      /*await productPage.otherInfo(productData.choosePreferedVendor,productData.customProductFor,
+        console.log("vendor",productData.choosepreferedvendor)
+        console.log("custom",productData.customProductFor)
+
+      await productPage.otherInfo(productData.choosepreferedvendor,productData.customProductFor,
         productData.saleable,productData.markasFavorite,productData.isaRawMaterial,
         productData.isaSupplies,productData.isaPackaging,productData.isCustomizable,
         productData.displayInQuickCheckout)
       
       await productPage.productAttribute(productData.productAttributes)
 
-      await productPage.addInventory(productData.inventory, productData.inventoryType, 
-        productData.openingInventory,productData.inventoryLocation,productData.addedBy,
-        productData.addedOn,productData.showLiveInventory,productData.greaterThanQty,
-        productData.custominventoryType)
+      console.log("openining inventory",productData.openingInventory)
+      console.log("inventoryType",productData.inventoryType)
+      console.log("inventoryLocation",productData.inventoryLocation)
+      console.log("addedon",productData.addedOn)
+      console.log("addedby",productData.addedBy)
+      console.log("LiveINventory",productData.showLiveInventory)
+      console.log("greater",productData.greaterThanQty)
+      console.log("custom",productData.customInventoryType)
 
-      await productPage.verifyProductPricing(productData.templateCost,productData.templateDenisty);*/
+
+      //await productPage.addInventory('123','UNIT','chennai','surchay','2023-12-01','','2','UNIT')
+      await productPage.addInventory(productData.openingInventory, productData.inventoryType, 
+        productData.inventoryLocation,productData.addedBy,
+        productData.addedOn,productData.showLiveInventory,productData.greaterThanQty,
+        productData.customInventoryType)
+
+      console.log(productData.openingInventory)
+      console.log(productData.inventoryType)
+
+      console.log("packageAttributes",productData.packageAttributes)
+      console.log("mpo",productData.mpo)
+
+     /*await productPage.packageDetailsInput(data.productDetails.packageAttributes,data.productDetails.mqo,
+          data.productDetails.mqs,data.productDetails.stackable);   */ 
+      
+
+      // await productPage.packageDetailsInput('','','','')
+
+       console.log("unitMargin",productData.unitBuyerMargin)
+       console.log("unitDecimal",productData.unitBuyerDecimal)
+        console.log("unitButMargn",productData.unitBuyerMargin)
+        console.log("skuDecimal",productData.skuBuyerDecimal)
+        console.log("sjkuMargin",productData.skuBuyerMargin)
+        console.log("palletMargn",productData.palletBuyerMargin)
+     //  await productPage.pricing('11','13','12','10','10','12','08','09')
+       //await productPage.other('mfr')
+      await productPage.pricing(productData.unitBuyerMargin,productData.unitBuyerDecimal,
+        productData.skuBuyerMargin,productData.skuBuyerDecimal,productData.palletBuyerMargin,
+        productData.palletBuyerDecimal,productData.containerBuyerMargin,productData.containerBuyerDecimal)
+       console.log("productDetails",productData.containerBuyerDecimal)
+       console.log("untBuy",productData.unitBuyerMargin)
+        console.log("addKeywordInput",productData.addKeywordInput)
+
+       await productPage.other(productData.addKeywordInput)
+       console.log("addKeywordInput",productData.addKeywordInput)
+       console.log("density",productData.templateDenisty)
+       console.log("cost",productData.templateCost)
+      await productPage.verifyProductPricing(productData.templateCost,productData.templateDenisty);
+
   });
   });
 //});
