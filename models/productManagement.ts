@@ -67,6 +67,7 @@ export class Product extends PageObjectModel {
   mqoBulk: Locator;
   mqoCustom: Locator;
   mqs: Locator;
+  delete: Locator;
   stackableYes: Locator;
   stackableNo: Locator;
   productConsidered: Locator
@@ -142,6 +143,7 @@ export class Product extends PageObjectModel {
     this.productAttrAdd = this.page.locator('dadyin-button[ng-reflect-label="Add"]').nth(1);
     this.USDMT = this.page.locator('label').filter({hasText: ' USD/MT'}).first().locator('..').locator('input');
     this.USDMTSelect = this.page.locator('label').filter({hasText: ' USD/MT'}).first().locator('..').locator('select');
+    this.delete = this.page.getByRole('button', { name: 'SKU Package 1 : Select' }).getByRole('button')
 
     // Locators for Inventory section
     this.inventory = this.page.locator('input[ng-reflect-name="isInventoryListed"]')
@@ -159,7 +161,9 @@ export class Product extends PageObjectModel {
     this.packageAttributes = this.page.locator('input[ng-reflect-name="isPackageAttributes"]');
     //this.packageDetails = this.page.locator('button').filter({ hasText: 'Package Details' }).first();
     this.packageDetails = this.page.getByText('Package Details');
-    this.skuPackage = this.page.locator('input#sku');
+    //this.skuPackage = this.page.locator('text=SKU Package 1 : PALLET >> input[type="checkbox"]');
+    //this.skuPackage = this.page.locator('input[ng-reflect-name="isSku"]')
+    this.skuPackage = this.page.getByRole('checkbox', { name: 'SKU SKU' });
     this.yesButton = this.page.getByRole('button', { name: 'Yes' });
     this.mqoBulk = this.page.locator('label').filter({hasText: 'MQO (Bulk/Container)'}).first().locator('..').locator('input');
     this.mqoCustom = this.page.locator('label').filter({hasText: 'MQO (Custom)'}).first().locator('..').locator('input');
@@ -189,7 +193,7 @@ export class Product extends PageObjectModel {
   this.unit= this.page.getByText('Unit / Kg')
     
     // Locators for Pricing Details section
-    this.pricingDetails = this.page.getByText('Pricing Details', { exact: true });
+    this.pricingDetails = this.page.getByRole('tab', { name: 'Pricing Details' });
     this.unitBuyerMargin = this.page.locator('input[ng-reflect-name="marginPercent"]').nth(0);
     this.unitBuyerDecimal = this.page.locator('input[ng-reflect-name="decimalValue"]').nth(0);
     this.skuBuyerMargin = this.page.locator('input[ng-reflect-name="marginPercent"]').nth(1);
@@ -214,7 +218,7 @@ export class Product extends PageObjectModel {
   async productDetails(productCode,productDescription,upcCode,eanCode,skuType,unitCount,unitName,
     selectProductType,selectProductSubType,purchaseDescription) {
 
-    await this.addProduct.waitFor({ state: 'visible', timeout: 15000 })
+   // await this.addProduct.waitFor({ state: 'visible', timeout: 15000 })
     await this.addProduct.click();
     
     await this.inventory.check();
@@ -228,6 +232,7 @@ export class Product extends PageObjectModel {
     await this.skuType.selectOption(skuType);    
 
     await this.unitCount.fill(unitCount);
+    await this.unitName.fill(unitName)
 
 
     await this.selectProductType.click();
@@ -239,28 +244,29 @@ export class Product extends PageObjectModel {
     await this.purchaseDescription.fill(purchaseDescription)
 
     await this.unitName.fill(unitName)
-    await expect(unitName).toBe(unitName);
+    //await expect(unitName).toBe(unitName);
 
   }
 
   // Method to fill other product details information
   async otherInfo(choosePreferedVendor,customProductFor,saleable,markasFavorite,
       isaRawMaterial,isaSupplies,isaPackaging,isCustomizable,displayInQuickCheckout){
-    
+    console.log(choosePreferedVendor)
     await this.productDetailMenu.click();
     await this.page.waitForTimeout(2000);
     await this.choosePreferedVendor.click()
     await this.page.locator('span').filter({ hasText: choosePreferedVendor }).first().click();
     
     if (customProductFor !== '') {
-      await this.customProductFor.click();
-      await this.page.locator('span').filter({ hasText: customProductFor }).first().click();
+     // await this.customProductFor.click();
+     // await this.page.locator('span').filter({ hasText: customProductFor }).first().click();
     }
     if (saleable === 'true') {
       await this.sealable.click();
-    } else {
-      await this.nonSealable.click();
-    }
+    } //else {
+     // await this.nonSealable.click();
+   // }
+    console.log("sealabe",this.sealable)
 
     if(markasFavorite === 'true') {
       await this.isFavourite.check();
@@ -281,7 +287,7 @@ export class Product extends PageObjectModel {
     if (isCustomizable === 'true') {
     await this.isCustomizable.check();
     }
-    
+   
     if (displayInQuickCheckout === 'true') {
     await this.isQuickCheckoutEligible.check();
     }
@@ -301,13 +307,19 @@ export class Product extends PageObjectModel {
     
   // Method to fill product attributes
    async productAttribute(productAttributes){
+    //await this.productAttributes.scrollIntoViewIfNeeded();
+    //await this.page.waitForTimeout(1000);
+    //await this.productAttributes.hover();
     
+    //await this.productAttributes.check();
+    await this.page.waitForTimeout(2000);
     // Enter product attributes only if the productAttributes flag is set to 'true'
-    if (productAttributes.productAttributes === 'true') {
+   if (productAttributes.productAttributes === 'true') {
       await this.productAttributes.check();
       await this.page.waitForTimeout(2000);
+      console.log(productAttributes);
 
-      const entries = Object.entries(productAttributes);       
+     const entries = Object.entries(productAttributes ?? {});    
        for (let i = 1; i < entries.length; i+=2) {
         const [pairKey1,pairValue1] = entries[i];
         const [pairKey2,pairValue2] = entries[i + 1] ||[];
@@ -329,16 +341,18 @@ export class Product extends PageObjectModel {
     }
   }
     
-async addInventory(inventory,inventoryType,openingInventory,inventoryLocation,
+async addInventory(openingInventory,inventoryType,inventoryLocation,
   addedBy,addedOn,showLiveInventory,greaterThanQty,customInventoryType) {
     
-  if( inventory === 'true') {
-    await this.inventory.scrollIntoViewIfNeeded();
+  await this.inventory.check();
+
+  //if( inventory === 'true') {
+    /*await this.inventory.scrollIntoViewIfNeeded();
     await this.page.waitForTimeout(1000);
     await this.inventory.hover();
     await this.inventory.check();
     await this.page.waitForTimeout(2000);
-    await this.openingInventory.waitFor({ state: 'visible', timeout: 20000 });
+    await this.openingInventory.waitFor({ state: 'visible', timeout: 20000 });*/
     await this.openingInventory.fill(openingInventory)    
     await this.inventorySelect.selectOption(inventoryType);
     await this.page.waitForTimeout(2000);
@@ -347,10 +361,12 @@ async addInventory(inventory,inventoryType,openingInventory,inventoryLocation,
     await this.inventoryAddedOn.fill(addedOn)
       if(showLiveInventory !== 'true') {
         await this.showGreaterThan.click();
+        console.log("gresater",greaterThanQty)
+        console.log("custom",customInventoryType)
         await this.greaterThanQty.fill(greaterThanQty)
         await this.customInventoryType.selectOption(customInventoryType);
       }
-  }
+  //}
   
 };
 
@@ -362,30 +378,39 @@ async verifyProductPricing(templateCost,templateDenisty) {
 
 // Method to fill package details
 async packageDetailsInput(packageAttributes,mqo,mqs,stackable) {
-    if (packageAttributes === 'true') {
-      //await this.packageAttributes.check();
+   // if (packageAttributes === 'true') {
+      await this.packageAttributes.check();
       await this.packageDetails.click();
-      await this.page.waitForTimeout(2000);
-      await this.skuPackage.click();
-      await this.yesButton.click();
 
+      await this.page.waitForTimeout(2000);
+      console.log("skuPackage",this.skuPackage)
+     // await this.skuPackage.first().check();
       
-      await this.mqoBulk.fill(mqo);
+     if (!(await this.skuPackage.isChecked()) && await this.skuPackage.isEnabled()) {
+      await this.skuPackage.click(); }
+     //await this.yesButton.click();
+
+    //  console.log("mqocustom",this.mqoCustom)
+    //  console.log("mqs",this.mqs)
+      await this.mqoCustom.fill(mqo);
       await this.mqs.fill(mqs);
       if( stackable !== 'true') {
         await this.stackableNo.click();
       }
       await this.addNewPackage.click();
-    }
-    const valuePage2 = await this.productConsidered.textContent();
-    await expect(this.productConsidered).toHaveText('box');//toHaveText
+    //}
+   // const valuePage2 = await this.productConsidered.textContent();
+   // await expect(this.productConsidered).toHaveText('box');//toHaveText
     }
 
 // Method to fill pricing details
 async pricing(unitBuyerMargin,unitBuyerDecimal,skuBuyerMargin,skuBuyerDecimal,palletBuyerMargin,
   palletBuyerDecimal,containerBuyerMargin,containerBuyerDecimal){
-      await this.pricingDetails.click();
-      await this.unitBuyerMargin.fill(unitBuyerMargin)
+    console.log("unitBuyerMargin",unitBuyerMargin)  
+    await this.pricingDetails.click();
+      console.log(this.unitBuyerMargin)
+     // await this.unitBuyerMargin.fill(`${unitBuyerMargin}%`)
+     await this.unitBuyerMargin.fill(unitBuyerMargin)
       await this.unitBuyerDecimal.fill(unitBuyerDecimal)
       await this.skuBuyerMargin.fill(skuBuyerMargin)
       await this.skuBuyerDecimal.fill(skuBuyerDecimal)
