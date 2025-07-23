@@ -238,6 +238,7 @@ export class Product extends PageObjectModel {
     await this.selectProductType.click();
     await this.page.locator('span').filter({ hasText: selectProductType }).first().click();
 
+    console.log("selectProductSubType",selectProductSubType)
     await this.selectProductSubType.click();
     await this.page.locator('span').filter({ hasText: selectProductSubType }).first().click();
     
